@@ -1,6 +1,8 @@
+import 'package:booking_app/app_routes.dart';
 import 'package:booking_app/screens/all_hotels.dart';
 import 'package:booking_app/screens/all_tickets.dart';
 import 'package:booking_app/screens/search/search_screen.dart';
+import 'package:booking_app/screens/ticket/ticket_view.dart';
 import 'package:flutter/material.dart';
 import 'package:booking_app/base/bottom_nav_bar.dart';
 
@@ -12,24 +14,24 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       routes: {
         //root Route
-        "/": (context) {
+        AppRoutes.homePage: (context) {
           // return const SearchScreen();
           return const BottomNavBar();
         },
+        AppRoutes.ticketScreen: (context) {
+          return const TicketScreen();
+        },
         // Route 1
-        "/all_tickets": (context) {
+        AppRoutes.allTickets: (context) {
           return const AllTickets();
         },
-        // Route 2
-        "home": (context) {
-          return const MyApp();
-        },
-        "/all_hotels": (context) {
+        AppRoutes.allHotels: (context) {
           return const Allhotels();
         },
-        "/Search": (context) {
+        AppRoutes.search: (context) {
           return const SearchScreen();
         },
       },

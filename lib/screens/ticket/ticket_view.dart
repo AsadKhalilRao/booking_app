@@ -5,31 +5,76 @@ import 'package:booking_app/base/widgets/aap_layoutbuider_widget.dart';
 import 'package:booking_app/base/widgets/ticket_column_text.dart';
 import 'package:booking_app/base/widgets/ticket_view.dart';
 import 'package:booking_app/screens/search/widgets/app_ticket_tabs.dart';
+import 'package:booking_app/screens/ticket/widgets/ticker_positioned_circle.dart';
 import 'package:flutter/material.dart';
 
-class TicketScreen extends StatelessWidget {
+class TicketScreen extends StatefulWidget {
   const TicketScreen({super.key});
 
   @override
+  State<TicketScreen> createState() => _TicketScreenState();
+}
+
+class _TicketScreenState extends State<TicketScreen> {
+  late int ticketIndex = 0;
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+//*********************************************************************************************//
+// var args = ModalRoute.of(context)!.settings.arguments as Map;
+// The ! forcefully assumes current route settings is non-null, which is dangerous.
+// as Map cast the arguments into a Map. If arguments is null or not a Map, an exception occurs
+//*********************************************************************************************//
+    //?. is null-aware operator if ModalRoute.of(context) is null, it won't crash.
+    // .settings.arguments extracts the arguments passed to this screen
+    final args = ModalRoute.of(context)?.settings.arguments;
+    // Check if args is actually a Map<String, dynamic>, to avoid errors
+    //  Map<Key_String, Value_dynamic>
+    if (args is Map<String, dynamic>) {
+      // ?? is null-coalescing operator
+      //,if "index" is null, assign 0
+      ticketIndex = args["index"] ?? 0;
+    } else {
+      ticketIndex = 0;
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final double halfScreenHeight = MediaQuery.of(context).size.height * 0.4;
+
     return Scaffold(
+      appBar: AppBar(
+          title: const Text("Ticket"),
+          backgroundColor: const Color(0xffeeedf2),
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back_ios),
+            onPressed: () {
+              if (Navigator.canPop(context)) {
+                Navigator.pop(context); // Normal back navigation
+              } else {
+                // If no back history, go to Home screen
+                Navigator.pushReplacementNamed(context, "/");
+              }
+            },
+          )),
       backgroundColor: const Color(0xffeeedf2),
       body: Stack(children: [
         ListView(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
           children: [
-            const SizedBox(
-              height: 30,
-            ),
-            // TICKETS TEXT
-            const Text(
-              style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
-              "Tickets",
-            ),
+            // const SizedBox(
+            //   height: 30,
+            // ),
+            // // TICKETS TEXT
+            // const Text(
+            //   style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+            //   "Tickets",
+            // ),
             //SPACE
-            const SizedBox(
-              height: 20,
-            ),
+            // const SizedBox(
+            //   height: 20,
+            // ),
             //Upcoming and Previous TABS
             const AppTicketTabs(
               tabtextone: "Upcoming",
@@ -44,7 +89,7 @@ class TicketScreen extends StatelessWidget {
                 // color: Colors.green,
                 child: TicketView(
               isColor: true,
-              ticket: ticketList[0],
+              ticket: ticketList[ticketIndex],
             )),
             const SizedBox(
               height: 2,
@@ -211,23 +256,18 @@ class TicketScreen extends StatelessWidget {
                 // padding: const EdgeInsets.only(left: 10),
                 child: TicketView(
               // isColor: true,
-              ticket: ticketList[0],
+              ticket: ticketList[ticketIndex],
             )),
           ],
         ),
-        Positioned(
-          top: 50,
-          child: Container(
-            decoration: BoxDecoration(
-                //Giving circle shape to the Container
-                shape: BoxShape.circle,
-                border: Border.all(width: 4)),
-            child: const CircleAvatar(
-              maxRadius: 10,
-              backgroundColor: Colors.red,
-            ),
-          ),
-        )
+        TicketPositionedCircel(
+          top: halfScreenHeight,
+          pos: true,
+        ),
+        TicketPositionedCircel(
+          top: halfScreenHeight,
+          pos: null,
+        ),
       ]),
     );
   }

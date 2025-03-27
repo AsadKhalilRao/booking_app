@@ -14,9 +14,24 @@ class AllTickets extends StatelessWidget {
             scrollDirection: Axis.vertical,
             child: Column(
               children: ticketList.take(8).map((individualMap) {
-                return Container(
-                    margin: const EdgeInsets.only(bottom: 20),
-                    child: TicketView(ticket: individualMap));
+                return GestureDetector(
+                  onTap: () {
+                    var index = ticketList.indexOf(individualMap);
+                    print("Map of index $index");
+                    Navigator.pushNamed(context, AppRoutes.ticketScreen,
+                        // The arguments parameter sends data to the new screen
+                        // It accepts any type of data (e.g., a Map, List, String, int, etc.).
+                        // Here we are PASSING MAP to the ticketScreen
+                        arguments: {
+                          // define key value pair
+                          // "index" is the key
+                          "index": index
+                        });
+                  },
+                  child: Container(
+                      margin: const EdgeInsets.only(bottom: 20),
+                      child: TicketView(ticket: individualMap)),
+                );
               }).toList(),
             ),
           )
