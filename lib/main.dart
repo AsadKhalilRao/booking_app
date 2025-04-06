@@ -1,6 +1,7 @@
-import 'package:booking_app/app_routes.dart';
+import 'package:booking_app/base/utils/app_routes.dart';
 import 'package:booking_app/screens/all_hotels.dart';
 import 'package:booking_app/screens/all_tickets.dart';
+import 'package:booking_app/screens/hotel_detail.dart';
 import 'package:booking_app/screens/search/search_screen.dart';
 import 'package:booking_app/screens/ticket/ticket_view.dart';
 import 'package:flutter/material.dart';
@@ -33,6 +34,9 @@ class MyApp extends StatelessWidget {
         },
         AppRoutes.search: (context) {
           return const SearchScreen();
+        },
+        AppRoutes.hotelDetail: (context) {
+          return const HotelDetail();
         },
       },
       // Application name
